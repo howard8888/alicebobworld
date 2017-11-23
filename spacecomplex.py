@@ -36,7 +36,7 @@ except:
    GIT_SYNCH -- used to ensure Git is synchronizing latest version or date of the code
    '''
 numbers =[]
-GIT_SYNCH=152
+GIT_SYNCH=153 #nov 22 2017 all algos working
 
 class Numbers(object):
     ''' Initializes and maintains array or set holding chosen numbers by players.
