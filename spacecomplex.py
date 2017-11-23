@@ -36,7 +36,7 @@ except:
    GIT_SYNCH -- used to ensure Git is synchronizing latest version or date of the code
    '''
 numbers =[]
-GIT_SYNCH=154 #nov 22 2017 added mirror allow 2N+1
+GIT_SYNCH=155 #nov 22 2017 added mirror allow 2N+1
 
 class Numbers(object):
     ''' Initializes and maintains array or set holding chosen numbers by players.
