@@ -36,7 +36,7 @@ except:
    GIT_SYNCH -- used to ensure Git is synchronizing latest version or date of the code
    '''
 numbers =[]
-GIT_SYNCH=153 #nov 22 2017 all algos working
+GIT_SYNCH=154 #nov 22 2017 added mirror allow 2N+1
 
 class Numbers(object):
     ''' Initializes and maintains array or set holding chosen numbers by players.
@@ -64,7 +64,7 @@ class Numbers(object):
     gamesize = 0  
     GAMESIZE_DEFAULT =11
     TIMES_DEFAULT=1
-    guess_list = [1,2,3,4,5,6,7,8,9,10,11]   
+    guess_list = [1,2,3,4,5,6,7,8,9,10,11,12]   
     Batchy=namedtuple('namedtuple_for_batch_parms','bob alice n times')
     bp=Batchy._make([0,0,0,0])
     #previous code: 'batch_parameters' used instead of 'bp'; prior to that: 'batch_parameters' was a list not a namedtuple
@@ -181,7 +181,7 @@ class Numbers(object):
         print 'choosing a number to say. Available selections at present include:\n'
         print """
         1.  Random guessing,unlimited space & time until valid guess [default]
-        2.  Mirror strategy,0 memory spaces, n forced even
+        2.  Mirror strategy,1 memory space, n forced even 2N
         3.  Random guessing,0 memory spaces to check 0 previous guesses []
         4.  Random guessing,1 memory space to check last guess [n-1]
         5.  Random guessing,3 memory spaces to check 3 last guesses [n-1,2,3]
@@ -191,7 +191,7 @@ class Numbers(object):
         9.  Guess 1 more than opponent\'s guess, 1 memory space [n-1]
         10. Guess 1 more than opponent\'s guess, 2 memory spaces [n-1,2]
         11. Guess 1 more, 2 mem spaces [n-1,2],new algo max/used value guess
-        12. Future: Random guess,3 mem spaces to check first 3 guesses
+        12. Mirror strategy, 1 memory space, allow n=2N(even) or 2N+1(odd)
         13. Future: Random guess,3 mem spaces to check 3 random guesses
         14. Future: Random guess,3 mem spaces to most frequent used nos"""
         
@@ -458,7 +458,7 @@ class Player(object):
             return Numbers.gamesize + 1 -numbers[-1]
         else:
             print "**Mirror Strategy not intended to be first move of the game**"
-            return Numbers.gamesize
+            return random.randint(1,Numbers.gamesize)
         
     def guess3(self):
         '''random guessing with zero memory space to check if already chosen
@@ -614,13 +614,35 @@ class Player(object):
                for i in range (1, Numbers.gamesize):
                     if i not in numbers[-2:]:
                         return i
-    
+   
+    def guess12(self):
+        ''' Mirror strategy,0 memory spaces
+       Same as version where n must be even (2N) but here do not force this
+       contraint, and thus can run with number of possible numbers being 2N (even)
+       or 2N+1 (odd).
+       Also includes feature to prevent (2N+1)/2 value by Alice causing Bob to
+       repeat the same value, eg, n=11, last guess 6 -- therefore n+1-x =6 --
+       but this is same as last value -- do not allow
+       '''
+        if  len(numbers)>0:
+            #if Alice chooses x, Bob chooses n+1-x
+            if Numbers.gamesize + 1 - numbers[-1] == numbers[-1]:
+                    while True:
+                        z = random.randint(1,Numbers.gamesize)
+                        if z!= numbers[-1]:
+                            return z
+            else:
+                    return Numbers.gamesize + 1 -numbers[-1]
+        else:
+            print "**Mirror Strategy not intended to be first move of the game**"
+            return random.randint(1,Numbers.gamesize)
+        
     def guess_text(self,guess_algo):
         '''returns text string describing guess_algo number '''
         guess_list=[\
             'not used at present',
             'random guessing with unlimited space and time constraints',
-            'uses mirror strategy -- Alice says x, Bob responds with n+1-x  ',
+            'uses mirror strategy -- Alice says x, Bob responds with n+1-x, n must be even',
             'random guessing with zero memory space to check if already chosen []',
             'random guessing with 1 memory space to check last guess if already chosen [n-1]',
             'random guessing with 3 memory locations to check last 3 guesses if already chosen [n-1,2,3]',\
@@ -629,8 +651,9 @@ class Player(object):
             'code your own algo here (currently just returns a 1)',
             'guess is simply 1 more than oponent\'s choice; will check for bounds of guess and uses 1 memory location [numbers-1] for strategy -- last guess',
             'guess is simply 1 more than oponent\'s choice; will check for bounds of guess and uses 2 memory locations[numbers-1],[numbers-2] opponent\'s last 2 guesses',
-            'guess is simply 1 more than oponent\'s choice; check 2 memory locations [numbers-1],[numbers-2] but strategy for guessing when max number exists or previous guesses exist is different']
-        if guess_algo >=1 and guess_algo <=11:
+            'guess is simply 1 more than oponent\'s choice; check 2 memory locations [numbers-1],[numbers-2] but strategy for guessing when max number exists or previous guesses exist is different',
+            'uses mirror strategy -- Alice says x, Bob responds with n+1-x, n can be odd or even']
+        if guess_algo >=1 and guess_algo <=12:
             return guess_list[guess_algo]
         else:
             return 'guess algo not specified -- probably random guessing with unlimited space and time constraints'                      
@@ -658,8 +681,9 @@ class Player(object):
                 self.guess8,
                 self.guess9,
                 self.guess10,
-                self.guess11]
-        if self.guess_algo  <1 or  self.guess_algo >11:
+                self.guess11,
+                self.guess12]
+        if self.guess_algo  <1 or  self.guess_algo >12:
                 x= sg[1]()
         else:
                 x= sg[self.guess_algo]()  #any guess algo will return some guess x
