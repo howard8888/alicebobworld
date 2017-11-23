@@ -639,7 +639,7 @@ class Player(object):
         
     def guess_text(self,guess_algo):
         '''returns text string describing guess_algo number '''
-        guess_list=[\
+        guess_list_text=[\
             'not used at present',
             'random guessing with unlimited space and time constraints',
             'uses mirror strategy -- Alice says x, Bob responds with n+1-x, n must be even',
@@ -653,8 +653,8 @@ class Player(object):
             'guess is simply 1 more than oponent\'s choice; will check for bounds of guess and uses 2 memory locations[numbers-1],[numbers-2] opponent\'s last 2 guesses',
             'guess is simply 1 more than oponent\'s choice; check 2 memory locations [numbers-1],[numbers-2] but strategy for guessing when max number exists or previous guesses exist is different',
             'uses mirror strategy -- Alice says x, Bob responds with n+1-x, n can be odd or even']
-        if guess_algo >=1 and guess_algo <=12:
-            return guess_list[guess_algo]
+        if guess_algo >=1 and guess_algo <=Numbers.guess_list[-1]:
+            return guess_list_text[guess_algo]
         else:
             return 'guess algo not specified -- probably random guessing with unlimited space and time constraints'                      
       
@@ -683,7 +683,7 @@ class Player(object):
                 self.guess10,
                 self.guess11,
                 self.guess12]
-        if self.guess_algo  <1 or  self.guess_algo >12:
+        if self.guess_algo  <1 or  self.guess_algo >Numbers.guess_list[-1]:
                 x= sg[1]()
         else:
                 x= sg[self.guess_algo]()  #any guess algo will return some guess x
