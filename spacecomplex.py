@@ -5,18 +5,7 @@
 # Note : This code is based on a segment of the work of Garg and Schneider 2017, 
 #         abstract reproduced below from the preprint server:
 #         https://arxiv.org/abs/1710.02898
-'''
-The space complexity of mirror games
 
-Sumegha Garg, Jon Schneider
-(Submitted on 8 Oct 2017)
-We consider a simple streaming game between two players Alice and Bob, which we call the mirror game. In this game, Alice and Bob take turns saying numbers belonging to the set {1,2,…,2N}. A player loses if they repeat a number that has already been said. Bob, who goes second, has a very simple (and memoryless) strategy to avoid losing: whenever Alice says x, respond with 2N+1−x. The question is: does Alice have a similarly simple strategy to win that avoids remembering all the numbers said by Bob? 
-The answer is no. We prove a linear lower bound on the space complexity of any deterministic winning strategy of Alice. Interestingly, this follows as a consequence of the Eventown-Oddtown theorem from extremal combinatorics. We additionally demonstrate a randomized strategy for Alice that wins with high probability that requires only O~(N−−√) space (provided that Alice has access to a random matching on K2N). 
-We also investigate lower bounds for a generalized mirror game where Alice and Bob alternate saying 1 number and b numbers each turn (respectively). When 1+b is a prime, our linear lower bounds continue to hold, but when 1+b is composite, we show that the existence of a o(N) space strategy for Bob implies the existence of exponential-sized matching vector families over ZN1+b.
-Comments:	13 pages
-Subjects:	Computational Complexity (cs.CC); Discrete Mathematics (cs.DM)
-Cite as:	arXiv:1710.02898 [cs.CC]
-'''
 
 
 #imports
