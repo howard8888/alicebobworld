@@ -2,9 +2,7 @@
 #
 # implementation of Alice and Bob playing space complexity games
 #
-# Note : This code is based on a segment of the work of Garg and Schneider 2017, 
-#         abstract reproduced below from the preprint server:
-#         https://arxiv.org/abs/1710.02898
+
 
 
 
