@@ -1,4 +1,6 @@
-
+(Note: This is simply a programming exercise I created for myself. All information theory concepts are taken from the literature. No new contributions are made here by myself. -- Howard :)
+        
+        
         Welcome to Data Negotiation World
         
         Imagine you are in a world where everything functions by way of
