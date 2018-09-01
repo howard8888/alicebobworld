@@ -1,4 +1,5 @@
 (Note: This is simply a programming exercise I created for myself. All information theory concepts are taken from the literature. No new contributions are made here by me. -- Howard :)
+(Note:  Code intended to run under Python 2.7. I will re-write for Python 3.6 at a later date. -- Howard :)
         
         
         Welcome to Data Negotiation World
