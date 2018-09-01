@@ -1,4 +1,4 @@
-(Note: This is simply a programming exercise I created for myself. All information theory concepts are taken from the literature. No new contributions are made here by myself. -- Howard :)
+(Note: This is simply a programming exercise I created for myself. All information theory concepts are taken from the literature. No new contributions are made here by me. -- Howard :)
         
         
         Welcome to Data Negotiation World
