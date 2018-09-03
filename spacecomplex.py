@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*- 
 #
 # implementation of Alice and Bob playing space complexity games
+# (simply an exercise in coding -- all info theory concepts are taken from the literature)
 #
-
 
 
 
@@ -14,8 +14,8 @@ from collections import namedtuple
 try:
     import psutil
 except:
-    print '\nConsider installing psutil library to get time complexity results.'
-    print  '(It is not included in Python Standard Library but readily available via pypi/psutil or via anaconda distribution.)/n'
+    print ('\nConsider installing psutil library to get time complexity results.')
+    print  ('(It is not included in Python Standard Library but readily available via pypi/psutil or via anaconda distribution.)/n')
   
   
 #global variables 
@@ -24,6 +24,7 @@ except:
    '''
 numbers =[]
 GIT_SYNCH=155 #nov 22 2017 added mirror allow 2N+1
+GIT_SYNCH=156 #aug 31 2018 made compatible with Python 3.6
 
 class Numbers(object):
     ''' Initializes and maintains array or set holding chosen numbers by players.
@@ -70,7 +71,7 @@ class Numbers(object):
     def welcome():
         '''print statements about welcome to the game
         '''
-        print """\n\n
+        print ("""\n\n
         Welcome to Data Negotiation World
         
         Imagine you are in a world where everything functions by way of
@@ -106,7 +107,7 @@ class Numbers(object):
         makes a wrong guess for any reason, including all the numbers
         being used up, then that player loses. However, user configurable so
         that ties can be allowed to occur if all numbers used up and no 
-        player has lost yet.\n\n"""
+        player has lost yet.\n\n""")
         
     @staticmethod
     def choose_gamesize():
@@ -119,7 +120,7 @@ class Numbers(object):
         to occur if all numbers are used up and no player has lost yet.
         '''
         
-        print '''\n\n           Ties vs No_Ties
+        print ('''\n\n           Ties vs No_Ties
         ------------------------
         Default mode when program starts is that no ties are allowed -- 
         if any player cannot make a valid guess for any reason, including
@@ -127,46 +128,42 @@ class Numbers(object):
         you can change this setting whenever you want. If you allow ties,
         then if all the numbers are used up (ie, guessed) and no player has
         lost yet, then this will be considered a tie.
-        '''
+        ''')
         if Numbers.no_ties ==1 :
-                    print 'At present ties are not allowed.'
+                    print ('At present ties are not allowed.')
         else:
-                    print 'At present ties are allowed -- if all numbers used up, then this will be tie'
+                    print ('At present ties are allowed -- if all numbers used up, then this will be tie')
         try:
-                    x=raw_input('Do you want to change (ie, toggle) if ties are allowed/not allowed [y,yes,n,no,ENTER for no]: ')
+                    x=input('Do you want to change (ie, toggle) if ties are allowed/not allowed [y,yes,n,no,ENTER for no]: ')
                     if x=='y' or x=='yes':
                         if Numbers.no_ties==0:
                             Numbers.no_ties=1
                         else:
                             Numbers.no_ties=0
-                        print '\nTies allowed status toggled. Status now is( 0 - ties allowed, 1 - not allowed): {}'.format(Numbers.no_ties)
+                        print ('\nTies allowed status toggled. Status now is( 0 - ties allowed, 1 - not allowed): {}'.format(Numbers.no_ties))
                     else:
-                        print '\nTies allowed status not changed. Status remains( 0 - ties allowed, 1 - not allowed): {}'.format(Numbers.no_ties)                   
+                        print ('\nTies allowed status not changed. Status remains( 0 - ties allowed, 1 - not allowed): {}'.format(Numbers.no_ties) )                  
         except:
-                    print '\nTies allowed status not changed. Status remains( 0 - ties allowed, 1 - not allowed): {}'.format(Numbers.no_ties)
+                    print ('\nTies allowed status not changed. Status remains( 0 - ties allowed, 1 - not allowed): {}'.format(Numbers.no_ties))
 
-        print '\n (highest integer allowed)'
-        print '---------------------------'
+        print ('\n (highest integer allowed)')
+        print ('---------------------------')
         try:
-            Numbers.gamesize=abs(int(raw_input('Highest integer players can say? [default ~11]: ')))
+            Numbers.gamesize=abs(int(input('Highest integer players can say? [default ~11]: ')))
         except:
-            print 'Default value of {} will be used'.format(Numbers.GAMESIZE_DEFAULT)
+            print ('Default value of {} will be used'.format(Numbers.GAMESIZE_DEFAULT))
             Numbers.gamesize= Numbers.GAMESIZE_DEFAULT
         if Numbers.gamesize <2:
             Numbers.gamesize = 2 
-        print 'This game will allow the players to choose numbers 1 - {}.\n'.format(Numbers.gamesize)
+        print ('This game will allow the players to choose numbers 1 - {}.\n'.format(Numbers.gamesize))
         time.sleep(2)
         return Numbers.gamesize
     
     @staticmethod
-    def choose_guess_algo(name):
-        '''print statements plus user choice of which algorithm a player
-        should use'''
-        print '{}'.format(name)
-        print '-------'
-        print 'You need to choose which algorithm {} should use for '.format(name) 
-        print 'choosing a number to say. Available selections at present include:\n'
-        print """
+    def print_user_choices(name):
+        print ('You need to choose which algorithm {} should use for '.format(name)) 
+        print ('choosing a number to say. Available selections at present include:\n')
+        print ("""
         1.  Random guessing,unlimited space & time until valid guess [default]
         2.  Mirror strategy,1 memory space, n forced even 2N
         3.  Random guessing,0 memory spaces to check 0 previous guesses []
@@ -180,18 +177,28 @@ class Numbers(object):
         11. Guess 1 more, 2 mem spaces [n-1,2],new algo max/used value guess
         12. Mirror strategy, 1 memory space, allow n=2N(even) or 2N+1(odd)
         13. Future: Random guess,3 mem spaces to check 3 random guesses
-        14. Future: Random guess,3 mem spaces to most frequent used nos"""
+        14. Future: Random guess,3 mem spaces to most frequent used nos""")
+        return
+	
+    @staticmethod
+    def choose_guess_algo(name):
+        '''print statements plus user choice of which algorithm a player
+        should use'''
+        print ('{}'.format(name))
+        print ('-------')
+        Numbers.print_user_choices(name)
         
         while True:
             try:
-                guess_algo=int(raw_input('Please select what algorithm to use [default algo 1]: '))
+                guess_algo=int(input('Please select what algorithm to use [default algo 1]: '))
             except:
+                print('Technical: Keystroke input is interpreted as exception thus becomes default value of 1')
                 return 1 
             else:
                 if (not(guess_algo in  Numbers.guess_list)):
                     return 1 
                 else:
-                    return guess_algo 
+                    return guess_algo
     
     @staticmethod
     def add(choice,name):
@@ -199,14 +206,14 @@ class Numbers(object):
         assuming the guessed number does not already exist in the list numbers. If the guess already
         exists then a -1 is returned and it is not appended vs +1 return for successful appending the number.'''
         if choice in numbers:
-            print '{}\'s guess is {} which unfortunately already exists, thus {} loses.'.format(name,choice,name)
+            print ('{}\'s guess is {} which unfortunately already exists, thus {} loses.'.format(name,choice,name))
             return -1
         if (type(choice) is int) and (choice<=Numbers.gamesize) and (choice>0):
             numbers.append(choice)
             return +1
         else: 
         #automatic guesses generated internally and thus always valid numbers but in case allow manual guessing in future
-            print '{}\'s manual guess is {} which is not a valid number, thus {} loses.'.format(name,choice,name)
+            print ('{}\'s manual guess is {} which is not a valid number, thus {} loses.'.format(name,choice,name))
             return -1
     
     @staticmethod
@@ -224,45 +231,45 @@ class Numbers(object):
         return [] array it will be converted to bp namedtuple.'''
         a = rawinput_aboutplayingagain 
         if a[0]=='g' or a =='version':
-           print '\n\n\n\nInternal version number or date to make sure Git is synchronized: {}'.format(GIT_SYNCH)
+           print ('\n\n\n\nInternal version number or date to make sure Git is synchronized: {}'.format(GIT_SYNCH))
            time.sleep(4)
            return [0,0,0,0]            
         if a[0] in ['0','1','2','3','4','5','6','7','8','9']:
             try:
                 q=map(int, a.split(','))
             except:
-                print 'Wrong input format -- will run again as non-batch run.\n'
+                print ('Wrong input format -- will run again as non-batch run.\n')
                 time.sleep(4)
                 return [0,0,0,0]   
         else:
-            print '\nBatch runs allow full and semi-automated running'
-            print 'of the game simulations, including multiple runs.' 
-            print 'You can specify [Bob strategy, Alice strategy],'
-            print 'eg, enter "1,5" for Bob to use algo1 and Alice algo5'
-            print 'in which case defaults of n={} and runs={} time(s) will '.format(Numbers.GAMESIZE_DEFAULT, Numbers.TIMES_DEFAULT)
-            print 'be used, or you can specify everything,eg, "1,5,100,10" '
-            print 'for Bob algo1, Alice algo5, guess 1-100, run 10 times'
-            print 'Note:Alice always moves first'
-            print 'Note: Go to interactive mode to change the TIES or NO_TIES mode,' 
-            print  'ie, doe we allow a tie if all numbers used up, or if a player cannot'
-            print 'make a valid guess for any reason, then that player loses.\n'
-            print 'Pending feature: Re-runs everything a second time but can guess n+1 numbers'
-            print ' this time so that runs with both odd and even maximum number of numbers'
-            print ' are experienced. This feature automatically occurs.'
-            print 'Pending feature: Enter "9999" and runs all the algos against each'
-            print ' other n=11 (odd) and n=12 (even) each combo run 20 times, ie,'
-            print ' if 15 algos then will generate matrix results 15x15 algos x2(odd/even).'
+            print ('\nBatch runs allow full and semi-automated running')
+            print ('of the game simulations, including multiple runs.') 
+            print ('You can specify [Bob strategy, Alice strategy],')
+            print ('eg, enter "1,5" for Bob to use algo1 and Alice algo5')
+            print ('in which case defaults of n={} and runs={} time(s) will '.format(Numbers.GAMESIZE_DEFAULT, Numbers.TIMES_DEFAULT))
+            print ('be used, or you can specify everything,eg, "1,5,100,10" ')
+            print ('for Bob algo1, Alice algo5, guess 1-100, run 10 times')
+            print ('Note:Alice always moves first')
+            print ('Note: Go to interactive mode to change the TIES or NO_TIES mode,' )
+            print ( 'ie, doe we allow a tie if all numbers used up, or if a player cannot')
+            print ('make a valid guess for any reason, then that player loses.\n')
+            print ('Pending feature: Re-runs everything a second time but can guess n+1 numbers')
+            print (' this time so that runs with both odd and even maximum number of numbers')
+            print (' are experienced. This feature automatically occurs.')
+            print ('Pending feature: Enter "9999" and runs all the algos against each')
+            print (' other n=11 (odd) and n=12 (even) each combo run 20 times, ie,')
+            print (' if 15 algos then will generate matrix results 15x15 algos x2(odd/even).')
             try:
-                q=map(int,raw_input('Enter: Bob algo, Alice algo, highest int, times run : ').split(','))
+                q=map(int,input('Enter: Bob algo, Alice algo, highest int, times run : ').split(','))
             except:
-                print 'Wrong input format -- will run again as non-batch run.\n'
+                print ('Wrong input format -- will run again as non-batch run.\n')
                 time.sleep(4)
                 return [0,0,0,0]
         if len(q) <2 or len(q)>4:
                 if q==[9999]:  #run all algos against each other n odd/even
-                    print 'Generate all algos x all algos matrix of results not available yet.'
+                    print ('Generate all algos x all algos matrix of results not available yet.')
                 else:
-                    print 'Too few or too many options -- will run again as non-batch run.\n'
+                    print ('Too few or too many options -- will run again as non-batch run.\n')
                 time.sleep(4)
                 return [0,0,0,0]
         if len(q)==2:
@@ -271,23 +278,23 @@ class Numbers(object):
         if len(q)==3:
             q.append(Numbers.TIMES_DEFAULT)  #need to set q[3]
         if q[0]<0 or q[1]<0 or q[2]<0 or q[3]<0:
-            print 'Negative integer  -- will run again as non-batch run.\n'
+            print ('Negative integer  -- will run again as non-batch run.\n')
             time.sleep(4)
             return [0,0,0,0]
         if (q[0] not in Numbers.guess_list) or (q[1] not in Numbers.guess_list):
-            print 'Wrong algo format -- will run again as non-batch run.\n'
+            print ('Wrong algo format -- will run again as non-batch run.\n')
             time.sleep(4)
             return [0,0,0,0]
         if  q[2]>10000:
-            print  'Over batch mode allowed guess range (n) of 10,000, thus n=10,0000'
+            print  ('Over batch mode allowed guess range (n) of 10,000, thus n=10,0000')
             time.sleep(4)
             q[2]=10000
         if  q[3]>10000:
-            print  'Over batch mode allowed run range (times) of 10,000, thus times=10,0000'
+            print  ('Over batch mode allowed run range (times) of 10,000, thus times=10,0000')
             time.sleep(4)
             q[3]=10000
         if  q[3]==1:
-            print  'Times==1 automatically changed to Times==0, ie, runs once and zero repeats.'
+            print  ('Times==1 automatically changed to Times==0, ie, runs once and zero repeats.')
             time.sleep(4)
             q[3]=0
         return q
@@ -310,30 +317,30 @@ class Numbers(object):
         #different representations of 'numbers'
         #copydict= {posn:guess for posn,guess in enumerate(numbers)}
         #print out lists of moves of games which occurred
-        print 'Numbers already chosen (as actual list) (Alice is first move): {} '.format(numbers)
+        print ('Numbers already chosen (as actual list) (Alice is first move): {} '.format(numbers))
         if  (1.0*len(numbers)/Numbers.gamesize)==1:
-            print 'Numbers already chosen (as sorted list): 1 - {} inclusive'.format(Numbers.gamesize)
+            print ('Numbers already chosen (as sorted list): 1 - {} inclusive'.format(Numbers.gamesize))
         else:
            copysortedlist = sorted(numbers) 
-           print 'Numbers already chosen (as sorted list): {} '.format(copysortedlist)
-       # print 'Same information as dictionary of the original list: {}'.format(copydict)
+           print ('Numbers already chosen (as sorted list): {} '.format(copysortedlist))
+       # print ('Same information as dictionary of the original list: {}'.format(copydict)
         #analysis of these moves
-        print 'Average guess value was ~ {}'.format(sum(numbers)/len(numbers))
-        print '\n\n' 
+        print ('Average guess value was ~ {}'.format(sum(numbers)/len(numbers)))
+        print ('\n\n' )
     
     @staticmethod
     def batch_game_summary(Bob_text,Alice_text):
         '''Summary of results of multiple game runs of given parameters'''
-        print '\nBatch Run Summary:\n------------------'
-        print 'Batch parameters: {}  {}  {}  {}'.format(Numbers.bp.bob,Numbers.bp.alice,Numbers.gamesize,Numbers.bp.times )
-        print 'Each game allows guesses from 1 - {}. Game was run {} times.'.format(Numbers.gamesize,Numbers.bp.times)
-        print " Alice -- goes first -- algo #{} -- {}".format(Numbers.bp.bob,Bob_text)
-        print " Bob -- goes second -- algo #{} -- {}".format(Numbers.bp.alice,Alice_text)
+        print ('\nBatch Run Summary:\n------------------')
+        print ('Batch parameters: {}  {}  {}  {}'.format(Numbers.bp.bob,Numbers.bp.alice,Numbers.gamesize,Numbers.bp.times ))
+        print ('Each game allows guesses from 1 - {}. Game was run {} times.'.format(Numbers.gamesize,Numbers.bp.times))
+        print (" Alice -- goes first -- algo #{} -- {}".format(Numbers.bp.bob,Bob_text))
+        print (" Bob -- goes second -- algo #{} -- {}".format(Numbers.bp.alice,Alice_text))
         if Numbers.no_ties == 1:
-            print "  No ties were allowed (when a player guesses an already chosen number, that player loses, even if no more unchosen numbers exist"
+            print ("  No ties were allowed (when a player guesses an already chosen number, that player loses, even if no more unchosen numbers exist")
         else:
-            print "  Ties were allowed -- if no player has lost and all the numbers have been chosen already, then this is considered a tie"
-        print 'Results of runs(+1 Bob won, 0 tie, -1 Alice won): {}\n'.format(Numbers.batch_array)
+            print ("  Ties were allowed -- if no player has lost and all the numbers have been chosen already, then this is considered a tie")
+        print ('Results of runs(+1 Bob won, 0 tie, -1 Alice won): {}\n'.format(Numbers.batch_array))
         total_score=0
         Bob_win=0
         Alice_win=0
@@ -343,48 +350,48 @@ class Numbers(object):
                 Bob_win+=1
             if Numbers.batch_array[i]<0:
                 Alice_win+=1
-        print 'Total score {} -- Bob wins: {}, Alice wins: {}, ties: {}'.format(total_score,Bob_win,Alice_win,Numbers.bp.times-Bob_win-Alice_win)
+        print ('Total score {} -- Bob wins: {}, Alice wins: {}, ties: {}'.format(total_score,Bob_win,Alice_win,Numbers.bp.times-Bob_win-Alice_win))
         if total_score > 0:
-            print ' -- Bob wins {:0.1f}% of games vs. Alice winning {:0.1f}% of games\n\n'.format(100.0*Bob_win/Numbers.bp.times, 100.0*Alice_win/Numbers.bp.times)
+            print (' -- Bob wins {:0.1f}% of games vs. Alice winning {:0.1f}% of games\n\n'.format(100.0*Bob_win/Numbers.bp.times, 100.0*Alice_win/Numbers.bp.times))
         elif total_score <0:
-            print ' -- Alice wins {:0.1f}% of games vs. Bob winning {:0.1f}% of games\n\n'.format(100.0*Alice_win/Numbers.bp.times, 100.0*Bob_win/Numbers.bp.times)
+            print (' -- Alice wins {:0.1f}% of games vs. Bob winning {:0.1f}% of games\n\n'.format(100.0*Alice_win/Numbers.bp.times, 100.0*Bob_win/Numbers.bp.times))
         else:
-            print ' -- Tie between Bob and Alice with both of them each winning {:0.1f}% of games, with rest ties\n\n'.format(100.0*Bob_win/Numbers.bp.times)
+            print (' -- Tie between Bob and Alice with both of them each winning {:0.1f}% of games, with rest ties\n\n'.format(100.0*Bob_win/Numbers.bp.times))
     
     @staticmethod
     def time_complexity_analysis(start_time,end_time):
         '''Summary of time results for the game runs'''
         map(Numbers.time_array.append,  ['n',Numbers.gamesize, 'runs',Numbers.bp.times, 'secs/run/n'])
-        print 'Time for above run or batch runs was:  {:.5f} seconds'.format(end_time-start_time)
+        print ('Time for above run or batch runs was:  {:.5f} seconds'.format(end_time-start_time))
         if Numbers.bp.times != 0:
-            print '  Time per run:  {:.6f} seconds'.format((end_time-start_time)/Numbers.bp.times)
-            print '  Time per run per range of guess (n={}):  {:.6f} seconds/all possible guesses'.format(   Numbers.gamesize,  ((end_time-start_time)/Numbers.bp.times)/Numbers.gamesize   )
-            Numbers.time_array.append(  round(((end_time-start_time)/Numbers.bp.times)/Numbers.gamesize,5)          )
+            print ('  Time per run:  {:.6f} seconds'.format((end_time-start_time)/Numbers.bp.times))
+            print ('  Time per run per range of guess (n={}):  {:.6f} seconds/all possible guesses'.format(   Numbers.gamesize,  ((end_time-start_time)/Numbers.bp.times)/Numbers.gamesize)   )
+            Numbers.time_array.append(  round(((end_time-start_time)/Numbers.bp.times)/Numbers.gamesize,5)         )
         else:
-           print '  Time for above run per range of guess (n={}): {:.5f} seconds/all possible guesses'.format(Numbers.gamesize, (end_time-start_time)/Numbers.gamesize)
+           print ('  Time for above run per range of guess (n={}): {:.5f} seconds/all possible guesses'.format(Numbers.gamesize, (end_time-start_time)/Numbers.gamesize))
            Numbers.time_array.append ( round((end_time-start_time)/Numbers.gamesize ,5))
-        print 'List of all batches/single runs this session, showing parameters & seconds/each run/n to assist in time complexity analysis:\n', Numbers.time_array
+        print ('List of all batches/single runs this session, showing parameters & seconds/each run/n to assist in time complexity analysis:\n', Numbers.time_array)
         times_only=[]
         for i in range(0, len(Numbers.time_array)):
             if (i+1)%10==0 :
                 times_only.append(Numbers.time_array[i])
-        print 'List of all batches/single runs this session, showing only seconds/each run/ n : {}'.format(times_only)
-        ave = sum(times_only)/len(times_only)
-        print  'Average seconds/each run/n for this session: {}'.format(ave)
+        print ('List of all batches/single runs this session, showing only seconds/each run/ n : {}'.format(times_only))
+        ave = sum(times_only)/(len(times_only) +0.000000000001)  #avoid division by zero error
+        print  ('Average seconds/each run/n for this session: {}'.format(ave))
         star_times=[]
         for i in range(0,len(times_only)):
             if  abs(times_only[i] - ave) >  (.30*ave):
                 star_times.append('*')
             star_times.append(times_only[i])
-        print 'List of all batches/single runs this session, with flag of seconds/each run/n > or < 30% of average : {}'.format(star_times) 
-        print '\nCPU used: {}'.format(platform.processor())
+        print ('List of all batches/single runs this session, with flag of seconds/each run/n > or < 30% of average : {}'.format(star_times) )
+        print ('\nCPU used: {}'.format(platform.processor()))
         try:
-            print 'Memory used: {}'.format(psutil.virtual_memory())
-            print 'CPU hardware cores: {}'.format(psutil.cpu_count(logical=False))
-            print 'Logical CPUs: {}'.format(psutil.cpu_count())
+            print ('Memory used: {}'.format(psutil.virtual_memory()))
+            print ('CPU hardware cores: {}'.format(psutil.cpu_count(logical=False)))
+            print ('Logical CPUs: {}'.format(psutil.cpu_count()))
         except:
-            print 'Memory & CPU characteristics: requires installation of psutil library'
-        print '\n-------------------------------------------------------\n\n'
+            print ('Memory & CPU characteristics: requires installation of psutil library')
+        print ('\n-------------------------------------------------------\n\n')
         
         
 class Player(object):
@@ -414,13 +421,13 @@ class Player(object):
         if self.guess_algo==2:
              if Numbers.gamesize%2 != 0:
                 Numbers.gamesize+=1
-                print 'Mirror Strategy guess algo requires even number of possible guesses.'
-                print 'Maximum number of guesses increased to {}.'.format(Numbers.gamesize)
-        print '\nThe player with name {} now exists and will use guess algorithm # {}'.format(name,self.guess_algo)
+                print ('Mirror Strategy guess algo requires even number of possible guesses.')
+                print ('Maximum number of guesses increased to {}.'.format(Numbers.gamesize))
+        print ('\nThe player with name {} now exists and will use guess algorithm # {}'.format(name,self.guess_algo))
         if  Numbers.bp.times == 0:
-            print '(Guesses must range from 1 - {}. The game will run only one time until there is a tie or win/loss.)\n'.format(Numbers.gamesize)
+            print ('(Guesses must range from 1 - {}. The game will run only one time until there is a tie or win/loss.)\n'.format(Numbers.gamesize))
         else:
-            print '(Guesses must range from 1 - {}. The game will run (ie, repeat) {} times over and over again in total using these parameters.)\n'.format(Numbers.gamesize, Numbers.bp.times)
+            print ('(Guesses must range from 1 - {}. The game will run (ie, repeat) {} times over and over again in total using these parameters.)\n'.format(Numbers.gamesize, Numbers.bp.times))
         time.sleep(4)
       
     def guess1(self):
@@ -436,15 +443,15 @@ class Player(object):
        Requires 2N (ie, even n) maximum value, thus Numbers.gamesize has
        been incremented to an even value if it was chosen as odd.
        
-       "The space complexity of mirror games -- Sumegha Garg, Jon Schneider
-        (Submitted on 8 Oct 2017)
+       "The space complexity of mirror games
+       	arXiv:1710.02898 [cs.CC]
         We consider a simple streaming game between two players Alice and Bob, which we call the mirror game. In this game, Alice and Bob take turns saying numbers belonging to the set {1,2,…,2N}. A player loses if they repeat a number that has already been said. Bob, who goes second, has a very simple (and memoryless) strategy to avoid losing: whenever Alice says x, respond with 2N+1−x. The question is: does Alice have a similarly simple strategy to win that avoids remembering all the numbers said by Bob?....."
         '''
         if  len(numbers)>0:
             #if Alice chooses x, Bob chooses 2N (ie,even n)+1-x 
             return Numbers.gamesize + 1 -numbers[-1]
         else:
-            print "**Mirror Strategy not intended to be first move of the game**"
+            print ("**Mirror Strategy not intended to be first move of the game**")
             return random.randint(1,Numbers.gamesize)
         
     def guess3(self):
@@ -621,7 +628,7 @@ class Player(object):
             else:
                     return Numbers.gamesize + 1 -numbers[-1]
         else:
-            print "**Mirror Strategy not intended to be first move of the game**"
+            print ("**Mirror Strategy not intended to be first move of the game**")
             return random.randint(1,Numbers.gamesize)
         
     def guess_text(self,guess_algo):
@@ -681,33 +688,33 @@ class Player(object):
         '''After  valid guess want to show guess chosen as well as all the numbers chosen so far,
         as long as the possible list of numbers is not too long'''
         if gamesize < 500:
-                   print '{}\'s guess is: {}, all chosen so far: {}'.format(self.name, x,numbers)
+                   print ('{}\'s guess is: {}, all chosen so far: {}'.format(self.name, x,numbers))
         else:
-                   print '{}\'s guess is: {}, all chosen so far: {}'.format(self.name, x,'too large to show')
+                   print ('{}\'s guess is: {}, all chosen so far: {}'.format(self.name, x,'too large to show'))
     
     def game_summary(self,name,x,bobalgo,alicealgo):
         '''print statements giving a summary of the game plus calling display_analysis for 
         analysis of the game'''
-        print '\nGame Summary:\n-------------'
+        print ('\nGame Summary:\n-------------')
         if Numbers.gamesize!=0:  
         #early version 0 gamesize was allowed
             if x<0:
                 if x==-0.1:  #-0.1 indicates loss because of tie game
-                    print  '{} lost because all numbers had already been guessed, and ties (current setting) not allow'.format(name)
+                    print  ('{} lost because all numbers had already been guessed, and ties (current setting) not allow'.format(name))
                 else:
-                    print '{} chose {} which already existed, thus {} lost this game.'.format(name,-1*x,name)
+                    print ('{} chose {} which already existed, thus {} lost this game.'.format(name,-1*x,name))
             elif x==0:
-                print 'Tie Game -- All numbers have been used up.'
+                print ('Tie Game -- All numbers have been used up.')
             else:
-                print 'error: should be tie game or lost game at this point'
-        print '\nMaximum turns possible: {}, Turns successfully played: {} ({:0.1f}%)'.format(Numbers.gamesize, len(numbers), (1.0*len(numbers)/Numbers.gamesize)*100  )
+                print ('error: should be tie game or lost game at this point')
+        print ( '\nMaximum turns possible: {}, Turns successfully played: {} ({:0.1f}%)'.format(Numbers.gamesize, len(numbers), ((1.0*len(numbers)/(Numbers.gamesize))*100))   )
         if Numbers.no_ties == 1:
-            print "  No ties were allowed (when a player guesses an already chosen number, that player loses, even if no more unchosen numbers exist"
+            print ("  No ties were allowed (when a player guesses an already chosen number, that player loses, even if no more unchosen numbers exist")
         else:
-            print "  Ties were allowed -- if no player has lost and all the numbers have been chosen already, then this is considered a tie"
-        print ' Bob\'s algo (Bob moves second) was #{} -- {}\n Alice\'s algo (Alice moves first) was #{} -- {}\n'.format(bobalgo,self.guess_text(bobalgo),alicealgo,self.guess_text(alicealgo))
+            print ("  Ties were allowed -- if no player has lost and all the numbers have been chosen already, then this is considered a tie")
+        print (' Bob\'s algo (Bob moves second) was #{} -- {}\n Alice\'s algo (Alice moves first) was #{} -- {}\n'.format(bobalgo,self.guess_text(bobalgo),alicealgo,self.guess_text(alicealgo)))
         if Numbers.bp.bob!= 0:
-                    print 'Batch parameters : {}'.format(Numbers.bp)        
+                    print ('Batch parameters : {}'.format(Numbers.bp)   )     
         Numbers.display_analysis()
              
         
@@ -724,7 +731,7 @@ def main():
         start_time= time.clock() 
         
         if  Numbers.bp.times==0 :
-            print "Running a single game.... let's start....\n-----------------------------------------"
+            print ("Running a single game.... let's start....\n-----------------------------------------")
             #Alice, first move, and then Bob take guesses
             while True:
                 
@@ -746,7 +753,7 @@ def main():
         else:   
         #run as multiple 'times' game run
             for i in range(Numbers.bp.times):
-                print  "Batch run of {} games -- running game {}\n---------------------------------------------------".format(Numbers.bp.times, i+1)
+                print  ("Batch run of {} games -- running game {}\n---------------------------------------------------".format(Numbers.bp.times, i+1))
                 del numbers[:] 
                 while True:
                    
@@ -786,7 +793,7 @@ def main():
         #run new game or exit?
         Numbers.erase() 
         try: 
-            aa=raw_input("Do you want to play again? [y/n] or [b, batch, 1,2{,3,4}]: \a")
+            aa=input("Do you want to play again? [y/n] or [b, batch, 1,2{,3,4}]: \a")
             if aa in ['batch','b','version','g'] or aa[0] in ['0','1','2','3','4','5','6','7','8','9']:
                 Numbers.bp=Numbers.Batchy._make(Numbers.batch_input(aa))
             else:
@@ -794,7 +801,7 @@ def main():
                     continue 
                     #run next game as non-batch input of parms since erase has reset to [0,0,0,0]
                 else:
-                    print "I have interpreted your input as not to replay the game.\nThank you for playing with me. Game over."
+                    print ("I have interpreted your input as not to replay the game.\nThank you for playing with me. Game over.")
                     break 
                     #break out of main() while loop
         except:
@@ -803,8 +810,8 @@ def main():
       
 
 if __name__=="__main__":
-    print '\n\n------------------START PROGRAM----------------\n\n'
+    print ('\n\n------------------START PROGRAM----------------\n\n')
     main()
-    print '\n\n----------------STOP (END) PROGRAM--------------\n\n'
+    print ('\n\n----------------STOP (END) PROGRAM--------------\n\n')
 
     
